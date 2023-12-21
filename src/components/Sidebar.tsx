@@ -4,11 +4,11 @@ import { LinkContainer } from "react-router-bootstrap";
 const Sidebar = () => {
   return (
     <Nav className="flex-column">
-      <LinkContainer to="/upload">
-        <Nav.Link>Upload</Nav.Link>
-      </LinkContainer>
       <LinkContainer to="/view">
         <Nav.Link>View</Nav.Link>
+      </LinkContainer>
+      <LinkContainer to="/upload">
+        <Nav.Link>Upload</Nav.Link>
       </LinkContainer>
     </Nav>
   );

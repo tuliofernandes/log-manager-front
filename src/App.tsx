@@ -16,9 +16,9 @@ function App() {
           </Col>
           <Col xs={10} id="page-content-wrapper">
             <Routes>
-              <Route path="/upload" element={<UploadLogs />} />
               <Route path="/view" element={<ViewLogs />} />
-              <Route path="/" element={<UploadLogs />} />
+              <Route path="/upload" element={<UploadLogs />} />
+              <Route path="/" element={<ViewLogs />} />
             </Routes>
           </Col>
         </Row>
