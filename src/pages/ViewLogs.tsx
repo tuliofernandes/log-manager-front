@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
+import DatePicker from "react-datepicker";
 import axios from "axios";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 interface ILog {
   logId: number;
@@ -13,17 +16,16 @@ interface ILog {
 }
 
 function ViewLogs(): React.ReactNode {
+  const [startDate, setStartDate] = useState(new Date("2016-01-01"));
+  const [endDate, setEndDate] = useState(new Date(new Date()));
   const [logs, setLogs] = useState<ILog[]>([]);
 
   const fetchLogs = async () => {
-    const endDate = new Date().toISOString().split("T")[0];
-    const startDate = "1970-01-01";
-
     try {
       const response = await axios.get("http://localhost:3000/logs", {
         params: {
-          start_date: startDate,
-          end_date: endDate,
+          start_date: startDate.toISOString().split("T")[0],
+          end_date: endDate.toISOString().split("T")[0],
         },
       });
 
@@ -42,6 +44,14 @@ function ViewLogs(): React.ReactNode {
   return (
     <div>
       <h2>View Logs</h2>
+      <DatePicker
+        selected={startDate}
+        onChange={(date: Date) => setStartDate(date)}
+      />
+      <DatePicker
+        selected={endDate}
+        onChange={(date: Date) => setEndDate(date)}
+      />
       <Button onClick={fetchLogs}>Refresh</Button>
       <Table striped bordered hover>
         <thead>
