@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  front:
+    container_name: log-manager-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+
+networks:
+  webnet:
