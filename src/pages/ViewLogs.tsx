@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Form, Table, Button, Pagination } from "react-bootstrap";
-import DatePicker from "react-datepicker";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-
 import "react-datepicker/dist/react-datepicker.css";
 
-interface ILog {
+import QueryForm from "../components/QueryForm";
+import LogList from "../components/LogList";
+import Pagination from "../components/Pagination";
+
+export interface ILog {
   logId: number;
   ip: string;
   datetime: string;
@@ -15,7 +16,7 @@ interface ILog {
   description: string;
 }
 
-function ViewLogs(): React.ReactNode {
+const ViewLogs: React.FC = () => {
   const [startDate, setStartDate] = useState(new Date("2016-01-01"));
   const [endDate, setEndDate] = useState(new Date(new Date()));
   const [messagePattern, setMessagePattern] = useState("");
@@ -54,77 +55,30 @@ function ViewLogs(): React.ReactNode {
     pageNumbers.push(i);
   }
 
-  const start = Math.max(currentPage - 5, 0);
-  const end = Math.min(start + 30, pageNumbers.length);
-  const visiblePageNumbers = pageNumbers.slice(start, end);
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div>
       <h2>View Logs</h2>
-      <Form.Control
-        type="text"
-        placeholder="Search"
-        value={messagePattern}
-        onChange={(e) => setMessagePattern(e.target.value)}
+      <QueryForm
+        messagePattern={messagePattern}
+        startDate={startDate}
+        endDate={endDate}
+        onMessagePatternChange={setMessagePattern}
+        onStartDateChange={setStartDate}
+        onEndDateChange={setEndDate}
+        onFetchLogs={fetchLogs}
       />
-      <DatePicker
-        selected={startDate}
-        onChange={(date: Date) => setStartDate(date)}
-      />
-      <DatePicker
-        selected={endDate}
-        onChange={(date: Date) => setEndDate(date)}
-      />
-      <Button onClick={fetchLogs}>Refresh</Button>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Log ID</th>
-            <th>IP</th>
-            <th>Datetime</th>
-            <th>Type</th>
-            <th>Version</th>
-            <th>Title</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentLogs.map((log) => (
-            <tr key={log.logId}>
-              <td>{log.logId}</td>
-              <td>{log.ip}</td>
-              <td>{new Date(log.datetime).toLocaleString()}</td>
-              <td>{log.type}</td>
-              <td>{log.version}</td>
-              <td>{log.title}</td>
-              <td>{log.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <LogList logs={currentLogs} />
       <Pagination
-        style={{ overflowX: "auto", display: "flex", flexWrap: "nowrap" }}
-      >
-        <Pagination.Prev
-          onClick={() => setCurrentPage((old) => Math.max(1, old - 1))}
-        />
-        {visiblePageNumbers.map((number) => (
-          <Pagination.Item
-            key={number}
-            active={number === currentPage}
-            onClick={() => setCurrentPage(number)}
-          >
-            {number}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next
-          onClick={() =>
-            setCurrentPage((old) => Math.min(pageNumbers.length, old + 1))
-          }
-        />
-      </Pagination>
+        currentPage={currentPage}
+        pageNumbers={pageNumbers}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
-}
+};
 
 export default ViewLogs;
