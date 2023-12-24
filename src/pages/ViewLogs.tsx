@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 import QueryForm from "../components/QueryForm";
@@ -19,6 +20,7 @@ const ViewLogs: React.FC = () => {
     data: logs,
     refetch,
     isLoading,
+    error,
   } = useLogs(startDate, endDate, messagePattern);
 
   const indexOfLastLog = currentPage * logsPerPage;
@@ -32,6 +34,10 @@ const ViewLogs: React.FC = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  useEffect(() => {
+    if (error) alert(error.message);
+  }, [error]);
 
   return (
     <div>
