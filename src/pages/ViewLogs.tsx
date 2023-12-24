@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Table, Button, Pagination } from "react-bootstrap";
+import { Form, Table, Button, Pagination } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import axios from "axios";
 
@@ -18,6 +18,7 @@ interface ILog {
 function ViewLogs(): React.ReactNode {
   const [startDate, setStartDate] = useState(new Date("2016-01-01"));
   const [endDate, setEndDate] = useState(new Date(new Date()));
+  const [messagePattern, setMessagePattern] = useState("");
   const [logs, setLogs] = useState<ILog[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const logsPerPage = 50;
@@ -28,6 +29,7 @@ function ViewLogs(): React.ReactNode {
         params: {
           start_date: startDate.toISOString().split("T")[0],
           end_date: endDate.toISOString().split("T")[0],
+          message_pattern: messagePattern === "" ? undefined : messagePattern,
         },
       });
 
@@ -35,7 +37,7 @@ function ViewLogs(): React.ReactNode {
     } catch (error) {
       console.error(error);
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, messagePattern]);
 
   useEffect(() => {
     if (logs.length === 0) {
@@ -59,6 +61,12 @@ function ViewLogs(): React.ReactNode {
   return (
     <div>
       <h2>View Logs</h2>
+      <Form.Control
+        type="text"
+        placeholder="Search"
+        value={messagePattern}
+        onChange={(e) => setMessagePattern(e.target.value)}
+      />
       <DatePicker
         selected={startDate}
         onChange={(date: Date) => setStartDate(date)}
