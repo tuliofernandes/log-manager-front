@@ -1,9 +1,7 @@
 import { Table } from "react-bootstrap";
 
-import { ILog } from "../pages/ViewLogs";
-
 interface LogListProps {
-  logs: ILog[];
+  logs: Log[];
 }
 
 const LogList: React.FC<LogListProps> = ({ logs }) => {

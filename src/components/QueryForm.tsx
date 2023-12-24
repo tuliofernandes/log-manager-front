@@ -25,7 +25,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
     <div>
       <Form.Control
         type="text"
-        placeholder="Search"
+        placeholder="Search in description"
         value={messagePattern}
         onChange={(e) => onMessagePatternChange(e.target.value)}
       />
