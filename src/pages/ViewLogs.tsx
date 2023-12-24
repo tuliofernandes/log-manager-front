@@ -15,7 +15,11 @@ const ViewLogs: React.FC = () => {
   const logsPerPage = 15;
   const pageNumbers: number[] = [];
 
-  const { data: logs, refetch } = useLogs(startDate, endDate, messagePattern);
+  const {
+    data: logs,
+    refetch,
+    isLoading,
+  } = useLogs(startDate, endDate, messagePattern);
 
   const indexOfLastLog = currentPage * logsPerPage;
   const indexOfFirstLog = indexOfLastLog - logsPerPage;
@@ -32,6 +36,7 @@ const ViewLogs: React.FC = () => {
   return (
     <div>
       <h2>View Logs</h2>
+
       <QueryForm
         messagePattern={messagePattern}
         startDate={startDate}
@@ -41,7 +46,9 @@ const ViewLogs: React.FC = () => {
         onEndDateChange={setEndDate}
         onFetchLogs={refetch}
       />
-      <LogList logs={currentLogs} />
+
+      <LogList logs={currentLogs} isLoading={isLoading} />
+
       <Pagination
         currentPage={currentPage}
         pageNumbers={pageNumbers}
